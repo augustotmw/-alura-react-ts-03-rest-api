@@ -21,3 +21,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.MuiTableBody-root {
+  .MuiTableRow-root:last-child {
+    .MuiTableCell-root {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
