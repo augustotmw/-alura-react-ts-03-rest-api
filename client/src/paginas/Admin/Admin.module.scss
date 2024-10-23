@@ -1,0 +1,32 @@
+.container {
+  display: block;
+  padding: 20px 20%;
+  height: 100%;
+  width: 100%;
+
+  > Button {
+    margin-bottom: 16px;
+  }
+
+}
+
+.tableActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.alignSelfEnd {
+  justify-self: flex-end;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 15px 30px;
+  border-bottom: 1px solid #ccc;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}

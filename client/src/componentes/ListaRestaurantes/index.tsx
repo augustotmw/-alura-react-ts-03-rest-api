@@ -4,6 +4,7 @@ import Restaurante from './Restaurante';
 import {useEffect, useState} from 'react';
 import axios, {AxiosResponse} from 'axios';
 import {IPaginacao} from '../../interfaces/IPaginacao';
+import {Button} from '@mui/material';
 // import jsonRestaurantes from './restaurantes.json'; // codigo inicial
 
 
@@ -37,7 +38,7 @@ const ListaRestaurantes = () => {
   return (<section className={style.ListaRestaurantes}>
     <h1>Os restaurantes mais <em>bacanas</em>!</h1>
     {restaurantes?.map(item => <Restaurante restaurante={item} key={item.id} />)}
-    {nextPage && <button onClick={verMais}>Ver mais</button>}
+    {nextPage && <Button variant={'outlined'} onClick={verMais}>Ver mais</Button>}
   </section>)
 }
 
