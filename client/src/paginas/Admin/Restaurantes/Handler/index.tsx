@@ -1,18 +1,27 @@
 import themeAdmin from '../../Admin.module.scss';
 import {Button, TextField} from '@mui/material';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import IRestaurante from '../../../../interfaces/IRestaurante';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 
 const AdminRestaurantesHandler = () => {
 
   const navigate = useNavigate();
+  const params = useParams();
   const [form, setForm] = useState<IRestaurante>({
     nome: '',
     id: 0,
     pratos: []
   });
+
+  useEffect(() => {
+    console.log('params', params);
+    if (params.id) {
+      axios.get<IRestaurante>(`http://localhost:8000/api/v2/restaurantes/${params.id}/`)
+        .then(resp => setForm({ ...resp.data }));
+    }
+  }, [params])
 
   const onFormSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -20,12 +29,21 @@ const AdminRestaurantesHandler = () => {
     const { nome } = form;
 
     if (nome) {
-      axios.post('http://localhost:8000/api/v2/restaurantes/', { nome })
-        .then((resp) => {
-          console.log('Restaurante cadastrado com sucesso!', resp);
-          alert('Restaurante cadastrado com sucesso!');
-          navigate('/admin/restaurantes');
-        });
+      if (params.id) {
+        axios.put(`http://localhost:8000/api/v2/restaurantes/${params.id}/`, { nome })
+          .then((resp) => {
+            console.log('Restaurante editado com sucesso!', resp);
+            alert('Restaurante editado com sucesso!');
+            navigate('/admin/restaurantes');
+          });
+      } else {
+        axios.post('http://localhost:8000/api/v2/restaurantes/', { nome })
+          .then((resp) => {
+            console.log('Restaurante cadastrado com sucesso!', resp);
+            alert('Restaurante cadastrado com sucesso!');
+            navigate('/admin/restaurantes');
+          });
+      }
     }
 
   };
@@ -40,6 +58,7 @@ const AdminRestaurantesHandler = () => {
         </div>
         <div className={themeAdmin.formItem}>
           <Button type={'submit'} variant={'outlined'}>Salvar</Button>
+          <Link to={'/admin/restaurantes'}>Voltar</Link>
         </div>
       </form>
     </section>

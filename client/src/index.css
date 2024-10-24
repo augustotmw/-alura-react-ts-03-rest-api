@@ -22,11 +22,4 @@ code {
     monospace;
 }
 
-.MuiTableBody-root {
-  .MuiTableRow-root:last-child {
-    .MuiTableCell-root {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-}
+

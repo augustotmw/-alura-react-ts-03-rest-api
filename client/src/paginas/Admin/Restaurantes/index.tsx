@@ -3,7 +3,7 @@ import IRestaurante from '../../../interfaces/IRestaurante';
 import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material';
 import axios, {AxiosResponse} from 'axios';
 import themeAdmin from '../Admin.module.scss';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {IPaginacao} from '../../../interfaces/IPaginacao';
 
 
@@ -22,6 +22,19 @@ export default function AdminRestaurantes() {
     axios.get<IPaginacao<IRestaurante>>('http://localhost:8000/api/v1/restaurantes/')
       .then(respRestaurantes);
   }, []);
+
+  const deleteItem = (id:number) => {
+    axios.delete(`http://localhost:8000/api/v2/restaurantes/${id}/`)
+      .then(()=>{
+        console.log('Restaurante removido com sucesso!');
+        alert('Restaurante removido com sucesso!');
+        setRestaurantes(restaurantes.filter(restaurante => restaurante.id !== id));
+      })
+  }
+
+  const editItem = (id:number) => {
+    navigate(`/admin/restaurantes/${id}`);
+  }
 
   const handleRestaurante = () => {
     navigate('/admin/restaurantes/add');
@@ -52,6 +65,8 @@ export default function AdminRestaurantes() {
           <TableHead>
             <TableRow>
               <TableCell>Restaurante</TableCell>
+              <TableCell align={'center'}>Editar</TableCell>
+              <TableCell align={'center'}>Excluir</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -59,13 +74,21 @@ export default function AdminRestaurantes() {
               restaurantes.map((restaurante) => (
                 <TableRow key={restaurante.id}>
                   <TableCell>{restaurante.nome}</TableCell>
+                  <TableCell align={'center'}>
+                    <Button variant={'outlined'} color={'warning'}
+                      onClick={()=> editItem(restaurante.id)}>&#128221;</Button>
+                  </TableCell>
+                  <TableCell align={'center'}>
+                    <Button variant={'outlined'} color={'error'}
+                            onClick={()=> deleteItem(restaurante.id)}>&#10060;</Button>
+                  </TableCell>
                 </TableRow>
               ))
             }
             <TableRow>
-              <TableCell className={themeAdmin.tableActions}>
-                {<Button variant={'outlined'} onClick={prevPage} disabled={!Boolean(pagination.prev)}>Prev</Button>}
-                {<Button variant={'outlined'} onClick={nextPage} disabled={!Boolean(pagination.next)}>Next</Button>}
+              <TableCell colSpan={2} className={themeAdmin.tableActions}>
+                <Button variant={'outlined'} onClick={prevPage} disabled={!Boolean(pagination.prev)}>Prev</Button>
+                <Button variant={'outlined'} onClick={nextPage} disabled={!Boolean(pagination.next)}>Next</Button>
               </TableCell>
             </TableRow>
           </TableBody>
