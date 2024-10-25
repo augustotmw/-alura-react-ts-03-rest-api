@@ -26,9 +26,9 @@ export default function AdminRestaurantes() {
   const deleteItem = (id:number) => {
     axios.delete(`http://localhost:8000/api/v2/restaurantes/${id}/`)
       .then(()=>{
+        setRestaurantes(restaurantes.filter(restaurante => restaurante.id !== id));
         console.log('Restaurante removido com sucesso!');
         alert('Restaurante removido com sucesso!');
-        setRestaurantes(restaurantes.filter(restaurante => restaurante.id !== id));
       })
   }
 

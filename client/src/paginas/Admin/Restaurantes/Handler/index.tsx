@@ -1,5 +1,5 @@
 import themeAdmin from '../../Admin.module.scss';
-import {Button, TextField} from '@mui/material';
+import {Button, ButtonGroup, TextField} from '@mui/material';
 import {useEffect, useState} from 'react';
 import IRestaurante from '../../../../interfaces/IRestaurante';
 import axios from 'axios';
@@ -21,7 +21,11 @@ const AdminRestaurantesHandler = () => {
       axios.get<IRestaurante>(`http://localhost:8000/api/v2/restaurantes/${params.id}/`)
         .then(resp => setForm({ ...resp.data }));
     }
-  }, [params])
+  }, [params]);
+
+  const back = () => {
+    navigate('/admin/restaurantes');
+  }
 
   const onFormSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -56,10 +60,10 @@ const AdminRestaurantesHandler = () => {
           <TextField id="nome" label="Nome do Restaurante" variant="standard" value={form.nome}
                     onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {setForm({...form, nome: ev.target.value})}} />
         </div>
-        <div className={themeAdmin.formItem}>
-          <Button type={'submit'} variant={'outlined'}>Salvar</Button>
-          <Link to={'/admin/restaurantes'}>Voltar</Link>
-        </div>
+        <ButtonGroup variant={'outlined'}>
+          <Button type={'button'} onClick={back}>Voltar</Button>
+          <Button type={'submit'}>Salvar</Button>
+        </ButtonGroup>
       </form>
     </section>
   );

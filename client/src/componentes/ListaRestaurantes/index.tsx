@@ -37,6 +37,9 @@ const ListaRestaurantes = () => {
 
   return (<section className={style.ListaRestaurantes}>
     <h1>Os restaurantes mais <em>bacanas</em>!</h1>
+    <form>
+
+    </form>
     {restaurantes?.map(item => <Restaurante restaurante={item} key={item.id} />)}
     {nextPage && <Button variant={'outlined'} onClick={verMais}>Ver mais</Button>}
   </section>)
