@@ -13,6 +13,11 @@
 .tableActions {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+
+  > span {
+    flex: 1;
+  }
 }
 
 
@@ -22,8 +27,9 @@
   width: 100%;
   padding: 15px 30px;
   border-bottom: 1px solid #ccc;
+  margin-bottom: 16px;
 
-  &:last-child {
+  &:nth-last-of-type(1) {
     border-bottom: none;
   }
 }

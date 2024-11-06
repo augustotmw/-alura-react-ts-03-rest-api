@@ -1,0 +1,20 @@
+.topActions {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+
+  > span {
+    flex: 2;
+  }
+
+  > div {
+    justify-self: flex-end;
+    flex: 2;
+
+    &:nth-last-of-type(2) {
+      flex: 1;
+    }
+  }
+}
