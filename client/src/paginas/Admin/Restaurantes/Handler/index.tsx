@@ -1,8 +1,7 @@
-import themeAdmin from '../../Admin.module.scss';
-import {Box, Button, ButtonGroup, TextField} from '@mui/material';
+import {Box, Button, ButtonGroup, TextField, Paper} from '@mui/material';
 import {useEffect, useState} from 'react';
 import IRestaurante from '../../../../interfaces/IRestaurante';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams, Link as RouterLink} from 'react-router-dom';
 import http from '../../../../core/Http';
 
 const AdminRestaurantesHandler = () => {
@@ -52,19 +51,24 @@ const AdminRestaurantesHandler = () => {
   };
 
   return (
-    <section className={themeAdmin.container}>
+    <>
       <h1>Cadastrar Restaurante</h1>
-      <Box component={'form'} onSubmit={onFormSubmit}>
-        <div className={themeAdmin.formItem}>
-          <TextField id="nome" label="Nome do Restaurante" variant="standard" value={form.nome} required={true}
-                    onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {setForm({...form, nome: ev.target.value})}} />
-        </div>
-        <ButtonGroup variant={'contained'}>
-          <Button variant={'outlined'} type={'button'} onClick={back}>Voltar</Button>
-          <Button type={'submit'}>Salvar</Button>
-        </ButtonGroup>
-      </Box>
-    </section>
+      <Paper>
+        <Box component={'form'} onSubmit={onFormSubmit}>
+          <Box>
+            <TextField id="nome" label="Nome do Restaurante"
+                       variant="standard" value={form.nome} required={true}
+                       onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                         setForm({...form, nome: ev.target.value});
+                       }}/>
+          </Box>
+          <ButtonGroup variant={'contained'}>
+            <Button variant={'outlined'} type={'button'} onClick={back}>Voltar</Button>
+            <Button type={'submit'}>Salvar</Button>
+          </ButtonGroup>
+        </Box>
+      </Paper>
+    </>
   );
 }
 

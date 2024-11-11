@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from 'react';
-import IRestaurante from '../../../interfaces/IRestaurante';
 import {
   Box,
   Button, FormControl, InputLabel, MenuItem,
@@ -13,23 +12,24 @@ import {
   TextField,
 } from '@mui/material';
 import {AxiosResponse} from 'axios';
-import styles from './AdminRestaurantes.module.scss';
+import styles from '../Restaurantes/AdminRestaurantes.module.scss';
 import themeAdmin from '../Admin.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {IPaginacao} from '../../../interfaces/IPaginacao';
 import http from '../../../core/Http';
+import IPrato from '../../../interfaces/IPrato';
 
 
 let timeout: number|null  = null;
 
-export default function AdminRestaurantes() {
-  const v1Url = 'v1/restaurantes/';
+export default function AdminPratos() {
+  const v1Url = 'v2/pratos/';
 
   const [order, setOrder] = useState<string>('id');
   const [actualPage, setActualPage] = useState<number|null>(null);
   const [pagination, setPagination] =
     useState<{next:string|null, prev:string|null}>({next: null, prev: null});
-  const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
+  const [pratos, setPratos] = useState<IPrato[]>([]);
   const [search, setSearch] = useState<string>('');
   const navigate = useNavigate();
 
@@ -42,33 +42,34 @@ export default function AdminRestaurantes() {
     return null;
   }
 
-  const respRestaurantes = useCallback((resp: AxiosResponse<IPaginacao<IRestaurante>>) => {
-    setRestaurantes(resp.data.results);
-    setPagination({
-      prev: resp.data.previous ? resp.data.previous.replace('http://localhost:8000/api/', '') : resp.data.previous,
-      next: extractParamValueFromUrl(resp.data.next, 'page')
-    });
+  const respPratos = useCallback((resp: any) => {
+    console.log('resp pratos', resp);
+    // setPratos(resp);
+    // setPagination({
+    //   prev: resp.data.previous ? resp.data.previous.replace('http://localhost:8000/api/', '') : resp.data.previous,
+    //   next: extractParamValueFromUrl(resp.data.next, 'page')
+    // });
   }, []);
 
   const callbackLoadList = (page: number|null = null) => {
     let url = v1Url;
 
-    if (page) {
-      url += `${url.match(/\?/gi) ? '&' : '?'}page=${page}`;
-    }
+    // if (page) {
+    //   url += `${url.match(/\?/gi) ? '&' : '?'}page=${page}`;
+    // }
+    //
+    // if(search) {
+    //   url += `${url.match(/\?/gi) ? '&' : '?'}search=${search}`;
+    // }
+    // if(order) {
+    //   url += `${url.match(/\?/gi) ? '&' : '?'}ordering=${order}`;
+    // }
 
-    if(search) {
-      url += `${url.match(/\?/gi) ? '&' : '?'}search=${search}`;
-    }
-    if(order) {
-      url += `${url.match(/\?/gi) ? '&' : '?'}ordering=${order}`;
-    }
-
-    http.get<IPaginacao<IRestaurante>>(url)
-      .then(respRestaurantes);
+    http.get<AxiosResponse<IPrato[], any>>(url)
+      .then(respPratos);
   }
 
-  const loadList = useCallback(callbackLoadList, [search, order, respRestaurantes]);
+  const loadList = useCallback(callbackLoadList, [search, order, respPratos]);
 
   useEffect(()=> {
     if (timeout) { clearTimeout(timeout); }
@@ -78,20 +79,20 @@ export default function AdminRestaurantes() {
   }, [search, order, actualPage, loadList]);
 
   const addItem = () => {
-    navigate('/admin/restaurantes/add');
+    navigate('/admin/pratos/add');
   }
 
   const deleteItem = (id:number) => {
-    http.delete(`v2/restaurantes/${id}/`)
+    http.delete(`v2/pratos/${id}/`)
       .then(()=>{
-        setRestaurantes(restaurantes.filter(restaurante => restaurante.id !== id));
+        setPratos(pratos.filter(restaurante => restaurante.id !== id));
         console.log('Restaurante removido com sucesso!');
         alert('Restaurante removido com sucesso!');
       })
   }
 
   const editItem = (id:number) => {
-    navigate(`/admin/restaurantes/${id}`);
+    navigate(`/admin/pratos/${id}`);
   }
 
   const prevPage = () => {
@@ -118,7 +119,7 @@ export default function AdminRestaurantes() {
 
   return (
     <>
-      <h1>Admin Restaurantes</h1>
+      <h1>Admin Pratos</h1>
       <Box className={styles.topActions}>
         <span />
         <FormControl fullWidth>
@@ -138,29 +139,35 @@ export default function AdminRestaurantes() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Restaurante</TableCell>
+              <TableCell>Prato</TableCell>
+              <TableCell>Descrição</TableCell>
+              <TableCell>Tag</TableCell>
+              <TableCell>Imagem</TableCell>
               <TableCell align={'center'}>Editar</TableCell>
               <TableCell align={'center'}>Excluir</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {
-              restaurantes.map((restaurante) => (
-                <TableRow key={restaurante.id}>
-                  <TableCell>{restaurante.nome}</TableCell>
+              pratos.map((prato) => (
+                <TableRow key={prato.id}>
+                  <TableCell>{prato.nome}</TableCell>
+                  <TableCell>{prato.descricao}</TableCell>
+                  <TableCell>{prato.tag}</TableCell>
+                  <TableCell>{prato.imagem}</TableCell>
                   <TableCell align={'center'}>
                     <Button variant={'outlined'} color={'warning'}
-                      onClick={()=> editItem(restaurante.id)}>&#128221;</Button>
+                            onClick={()=> editItem(prato.id)}>&#128221;</Button>
                   </TableCell>
                   <TableCell align={'center'}>
                     <Button variant={'outlined'} color={'error'}
-                            onClick={()=> deleteItem(restaurante.id)}>&#10060;</Button>
+                            onClick={()=> deleteItem(prato.id)}>&#10060;</Button>
                   </TableCell>
                 </TableRow>
               ))
             }
             <TableRow>
-              <TableCell colSpan={3}>
+              <TableCell colSpan={6}>
                 <div className={themeAdmin.tableActions}>
                   <Button variant={'outlined'} onClick={prevPage} disabled={!Boolean(pagination.prev)}>Prev</Button>
                   <span />

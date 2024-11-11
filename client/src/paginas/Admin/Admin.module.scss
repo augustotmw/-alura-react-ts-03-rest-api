@@ -1,3 +1,23 @@
+.appBarBox {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+  padding: 0 16px;
+
+  > a {
+
+    > button {
+      color: white;
+      padding: 8px 16px;
+    }
+  }
+}
+
+.boxContainer {
+
+}
+
+
 .container {
   display: block;
   padding: 20px 20%;
@@ -20,16 +40,24 @@
   }
 }
 
+.adminContainer {
+  form {
+    > div {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 15px 30px;
+      box-shadow: none !important;
 
-.formItem {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 15px 30px;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 16px;
 
-  &:nth-last-of-type(1) {
-    border-bottom: none;
+      &:nth-last-of-type(1) {
+        flex-direction: row;
+      }
+    }
   }
+}
+
+
+.MuiButtonGroup-root {
+  padding: 0 16px 16px;
 }
